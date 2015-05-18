@@ -1310,7 +1310,7 @@ function zbx_cleanHashes(&$value) {
 
 function zbx_toCSV($values) {
 	$csv = '';
-	$glue = ';';
+	$glue = '";';
 	foreach ($values as $row) {
 		if (!is_array($row)) {
 			$row = array($row);
@@ -1323,7 +1323,7 @@ function zbx_toCSV($values) {
 				$row[$num] = str_replace('"', '""', $value);
 			}
 		}
-		$csv .= implode($glue, $row)."\n";
+		$csv .= .implode($glue, $row)."\n";
 	}
 
 	return $csv;
