@@ -22,7 +22,7 @@
 $temp_dir='/tmp';
 $prog_binpath='wkhtmltopdf';
 $prog_page_or='-O Landscape';
-$prog_html="http://1.99.23.7/";
+$prog_html="http://localhost/";
 
 function file_force_download_default($file) {
   if (file_exists($file)) {
