@@ -339,7 +339,6 @@ if(getRequest('file')=='csv')
 			$availability = calculateAvailability($trigger['triggerid'], getRequest('filter_timesince'),
 				getRequest('filter_timetill')
 			);
-			
 			$csvRows[]=array(
 				$trigger['hosts'][0]['name'],
 				$trigger['description'],
@@ -347,7 +346,7 @@ if(getRequest('file')=='csv')
 				sprintf('%.4f%%', $availability['false']),
 				$availability['true_time']==0 ? 0:zbx_date2age(0,$availability['true_time']),
 				$availability['false_time']==0 ? 0:zbx_date2age(0,$availability['false_time']),
-				$availability['total_time']==0 ? 0:zbx_date2age(0,$availability['total_time'])
+				$availability['total_time']==0 ? zbx_date2age(0,getRequest('period')):zbx_date2age(0,$availability['total_time'])
 			);
 		}
 	}
