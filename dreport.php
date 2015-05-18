@@ -41,13 +41,6 @@ $fields = array(
 check_fields($fields);
 
 $config = select_config();
-<<<<<<< HEAD
-//print_r($config);
-//$temp_dir='/tmp/reportpdf'
-//$prog_binpath='/usr/local/bin/wkhtmltopdf';
-//$prog_page_or='-O Landscape';
-=======
->>>>>>> parent of 371579f... adding dir
 
 $temp_dir='/var/www/html/zabbix/pdf';
 
@@ -95,10 +88,6 @@ if(getRequest('file')=='csv')
 	
 	require_once dirname(__FILE__).'/include/page_header.php';
 	
-<<<<<<< HEAD
-	//print_r($config);
-=======
->>>>>>> parent of 371579f... adding dir
 	if (getRequest('action')=='events')
 	{
 		$header = array(
@@ -121,7 +110,7 @@ if(getRequest('file')=='csv')
 			'monitored' => true
 		);
 
-		$allEventsSliceLimit = 999999;//$config['search_limit'];
+		$allEventsSliceLimit = 999999;
 		
 		$from = $_REQUEST['filter_timesince'];
 		$till = $_REQUEST['filter_timetill'];
@@ -217,12 +206,6 @@ if(getRequest('file')=='csv')
 		 * therefore at most only first $config['search_limit'] + 1 events will be used for pagination.
 		 */
 		$events = array_slice($events, 0, $allEventsSliceLimit);
-
-<<<<<<< HEAD
-		// get paging
-		//$paging = getPagingLine($events);
-=======
->>>>>>> parent of 371579f... adding dir
 
 		// query event with extend data
 		$events = API::Event()->get(array(
@@ -352,38 +335,22 @@ if(getRequest('file')=='csv')
 
 		CArrayHelper::sort($triggers, array('host', 'description'));
 
-		//$paging = getPagingLine($triggers);
-
 		foreach ($triggers as $trigger) {
 			$availability = calculateAvailability($trigger['triggerid'], getRequest('filter_timesince'),
 				getRequest('filter_timetill')
 			);
-<<<<<<< HEAD
 			
-=======
-
->>>>>>> parent of 371579f... adding dir
 			$csvRows[]=array(
 				$trigger['hosts'][0]['name'],
 				$trigger['description'],
 				sprintf('%.4f%%', $availability['true']),
 				sprintf('%.4f%%', $availability['false']),
-<<<<<<< HEAD
 				$availability['true_time']==0 ? 0:zbx_date2age(0,$availability['true_time']),
 				$availability['false_time']==0 ? 0:zbx_date2age(0,$availability['false_time']),
 				$availability['total_time']==0 ? 0:zbx_date2age(0,$availability['total_time'])
 			);
 		}
 	}
-	//print_r($csvRows);
-=======
-				zbx_date2age(0,$availability['true_time']),
-				zbx_date2age(0,$availability['false_time']),
-				zbx_date2age(0,$availability['total_time'])
-			);
-		}
-	}
->>>>>>> parent of 371579f... adding dir
 	$text_utf8 = zbx_toCSV($csvRows);
 	$text_cp1251 = iconv("UTF-8","CP1251",$text_utf8);
 	echo $text_cp1251;
@@ -391,26 +358,13 @@ if(getRequest('file')=='csv')
 }
 elseif(getRequest('file')=='pdf')
 {
-<<<<<<< HEAD
-	//exec("$prog_binpath $prog_page_or $prog_html");
-	//echo $prog_html;
-	//echo $temp_pdf;
-	//echo $html;
-=======
->>>>>>> parent of 371579f... adding dir
 	$prog_page_or="-O ".$_REQUEST['orient'];
 	exec("$prog_binpath $prog_page_or '".$html."' '".$temp_pdf."'",$stdout);
 	file_force_download_default($temp_pdf);
 }
 elseif(getRequest('file')=='http')
 {
-<<<<<<< HEAD
 	echo $html;
 	header("Location: $html");
 }
 ?>
-=======
-	header("Location: $html");
-}
-?>
->>>>>>> parent of 371579f... adding dir
