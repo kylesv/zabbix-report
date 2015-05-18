@@ -1323,7 +1323,7 @@ function zbx_toCSV($values) {
 				$row[$num] = str_replace('"', '""', $value);
 			}
 		}
-		$csv .= implode($glue, $row)."\n";
+		$csv .=  implode($glue, $row)."\n";
 	}
 
 	return $csv;
