@@ -88,6 +88,11 @@ if(getRequest('file')=='csv')
 	
 	require_once dirname(__FILE__).'/include/page_header.php';
 	
+	$header_text = getRequest('period')==86400 ? 'Дневной':(getRequest('period')==604800 ? 'Недельный':(getRequest('period')==2592000 ? 'Месячный':'Годовой'));
+	$header_text .= " отчет с ".zbx_date2str(DATE_TIME_FORMAT_SECONDS, getRequest('filter_timesince'));
+	$csvRows[] = array(
+		_($header_text)
+	);
 	if (getRequest('action')=='events')
 	{
 		$header = array(
