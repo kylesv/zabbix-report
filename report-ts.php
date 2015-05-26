@@ -52,6 +52,7 @@ $fields = array(
 	'action'=>				array(T_ZBX_STR, O_OPT, null,	null,		null),
 	'file'=>				array(T_ZBX_STR, O_OPT, null,	null,		null),
 	'orient'=>				array(T_ZBX_STR, O_OPT, null,	null,		null),
+	'page_size'=>			array(T_ZBX_STR, O_OPT, null,	null,		null),
 	'create_rep' =>			array(T_ZBX_STR, O_OPT, P_SYS,	null,		null),
 	'filter_rst' =>			array(T_ZBX_STR, O_OPT, P_SYS,	null,		null),
 	'show_triggers' =>		array(T_ZBX_INT, O_OPT, null,	null,		null),
@@ -102,6 +103,11 @@ if(!hasRequest('period'))
 	$_REQUEST['period'] = getRequest('period',CProfile::get('web.ts_report.period', 0));
 }
 
+if(!hasRequest('page_size'))
+{
+	$_REQUEST['page_size'] = getRequest('page_size',CProfile::get('web.ts_report.page_size', 0));
+}
+
 if(!hasRequest('elementid'))
 {
 	$_REQUEST['elementid'] = getRequest('elementid',CProfile::get('web.ts_report.elementid', 0));
@@ -128,6 +134,7 @@ if (hasRequest('filter_rst'))
 	? $_REQUEST['filter_timesince'] : date(TIMESTAMP_FORMAT_ZERO_TIME, time() - SEC_PER_DAY));
 	$_REQUEST['tpl_triggerid'] = 0;
 	$_REQUEST['groupid'] = 0;
+	$_REQUEST['page_size'] = "A4";
 	$_REQUEST['action'] = 'events';
 	$_REQUEST['file'] = 'pdf';
 	$_REQUEST['orient'] = 'Portrait';
@@ -153,6 +160,7 @@ CProfile::update('web.ts_report.period', getRequest('period', 0),PROFILE_TYPE_ST
 CProfile::update('web.ts_report.filter_timesince', getRequest('filter_timesince', 0),PROFILE_TYPE_STR);
 CProfile::update('web.ts_report.elementid', getRequest('elementid', 0),PROFILE_TYPE_ID);
 CProfile::update('web.ts_report.timesince', getRequest('filter_timesince', 0),PROFILE_TYPE_STR);
+CProfile::update('web.ts_report.page_size', getRequest('page_size', 0),PROFILE_TYPE_STR);
 CProfile::update('web.ts_report.hostgroupid', getRequest('hostgroupid', 0),PROFILE_TYPE_ID);
 
 
@@ -217,6 +225,14 @@ if(getRequest('action')=='events' or getRequest('action')=='report2' )
 	$cmbFile->addItem('csv', _('CSV'));
 }
 $cmbFile->addItem('http', _('Web page'));
+
+
+$cmbPageSize = new CComboBox('page_size', $_REQUEST['page_size'], 'submit()');
+$cmbPageSize->addItem('A4', _('A4'));
+$cmbPageSize->addItem('A3', _('A3'));
+$cmbPageSize->addItem('A2', _('A2'));
+$cmbPageSize->addItem('A1', _('A1'));
+
 if(getRequest('action')=='screens')
 {
 	$screens = API::Screen()->get(array(
@@ -341,6 +357,7 @@ if(getRequest('file')=='pdf')
 	$cmbOrient->addItem('Portrait', _('Книжная'));
 	$cmbOrient->addItem('Landscape', _('Альбомная'));
 	$filterForm->addRow(_('Ориентация листа'),$cmbOrient);
+	$filterForm->addRow(_('Размер страницы'),$cmbPageSize);
 }
 $filterForm->addRow(_('Период отчета'),$cmbPeriod);
 $filterForm->addRow(_('Начало'), $filterPeriodTable);

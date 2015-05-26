@@ -42,8 +42,6 @@ check_fields($fields);
 
 $config = select_config();
 
-$temp_dir='/var/www/html/zabbix/pdf';
-
 $_REQUEST['groupid'] = getRequest('groupid',CProfile::get('web.ts_report.groupid', 0));
 $_REQUEST['hostgroupid'] = getRequest('hostgroupid',CProfile::get('web.ts_report.hostgroupid', 0));
 $_REQUEST['hostid'] = getRequest('hostid',CProfile::get('web.ts_report.hostid', 0));
@@ -52,6 +50,7 @@ $_REQUEST['elementid'] = getRequest('elementid',CProfile::get('web.ts_report.ele
 $_REQUEST['period'] = getRequest('period',CProfile::get('web.ts_report.period', 0));
 $_REQUEST['file'] = getRequest('file',CProfile::get('web.ts_report.file', 0));
 $_REQUEST['orient'] = getRequest('orient',CProfile::get('web.ts_report.orient', 0));
+$_REQUEST['page_size'] = getRequest('page_size',CProfile::get('web.ts_report.page_size', 0));
 $_REQUEST['filter_timesince'] = getRequest('filter_timesince',CProfile::get('web.ts_report.timesince', 0));
 $_REQUEST['tpl_triggerid'] = getRequest('tpl_triggerid',CProfile::get('web.ts_report.tpl_triggerid', 0));
 $_REQUEST['filter_timetill'] = getRequest('filter_timesince') + $_REQUEST['period'];
@@ -60,7 +59,7 @@ if($_REQUEST['filter_timetill'] > time()){
 }
 $_REQUEST['stime']  = date(TIMESTAMP_FORMAT, getRequest('filter_timesince'));
 $stime =  getRequest('stime');
-
+$page_size="-s ".$_REQUEST['page_size'];
 switch (getRequest('action'))
 {
 	case "screens":
@@ -363,7 +362,7 @@ if(getRequest('file')=='csv')
 elseif(getRequest('file')=='pdf')
 {
 	$prog_page_or="-O ".$_REQUEST['orient'];
-	exec("$prog_binpath $prog_page_or '".$html."' '".$temp_pdf."'",$stdout);
+	exec("$prog_binpath $page_size $prog_page_or '".$html."' '".$temp_pdf."'",$stdout);
 	file_force_download_default($temp_pdf);
 }
 elseif(getRequest('file')=='http')
